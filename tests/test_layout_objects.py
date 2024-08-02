@@ -19,7 +19,7 @@ from crispy_forms.bootstrap import (
     TabHolder,
 )
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField
+from crispy_forms.layout import HTML, Field, Layout, MultiField, MultiWidgetField
 from crispy_forms.utils import render_crispy_form
 from django import forms
 from django.template import Context, Template
@@ -36,6 +36,7 @@ from .forms import (
     GroupedChoiceForm,
     InputsForm,
     SampleForm,
+    SampleForm4,
     SampleFormCustomWidgets,
 )
 from .utils import parse_expected, parse_form
@@ -662,3 +663,19 @@ class TestBootstrapLayoutObjects:
         form.helper = FormHelper()
         form.helper.layout = InlineRadios("checkboxes")
         assert parse_form(form) == parse_expected("inline_checkboxes.html")
+
+    def test_multifield(self):
+        form = SampleForm4()
+        form.helper = FormHelper()
+        form.helper.layout = Layout(
+            MultiField("Authentication", "email", "password"),
+        )
+        assert parse_form(form) == parse_expected("multifield.html")
+
+    def test_multifield_with_errors(self):
+        form = SampleForm4(data={})
+        form.helper = FormHelper()
+        form.helper.layout = Layout(
+            MultiField("Authentication", "email", "password"),
+        )
+        assert parse_form(form) == parse_expected("multifield.html")
