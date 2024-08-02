@@ -1,27 +1,27 @@
-{% load crispy_forms_field %}
+{#<div {% if multifield.css_id or errors %}id="{{ multifield.css_id }}"{% endif %}#}
+{#    {% if multifield.css_class %}class="{{ multifield.css_class }}"{% endif %}#}
+{#    {{ multifield.flat_attrs }}>#}
 
 {% if field.is_hidden %}
     {{ field }}
 {% else %}
 
-    {% if field.label %}
-        <label for="{{ field.id_for_label }}"{% if labelclass %} class="{{ labelclass }}"{% endif %}>
+    {% if form.non_field_errors %}
+        <div class="alert alert-block alert-danger">
+            {% if form_error_title %}<h4 class="alert-heading">{{ form_error_title }}</h4>{% endif %}
+            <ul class="m-0">
+                {{ form.non_field_errors|unordered_list }}
+            </ul>
+        </div>
     {% endif %}
+    {% if multifield.label_html %}
+            <label class="form-label{% if multifield.label_class %} {{ multifield.label_class }}{% endif %}">{{ multifield.label_html }}</label>
+        {% endif %}
 
-    {% if field|is_checkbox %}
-        {% crispy_field field %}
-    {% endif %}
+        <div class="input-group">
+            {{ fields_output }}
+        </div>
 
-    {% if field.label %}
-        {{ field.label }}
-    {% endif %}
-
-    {% if not field|is_checkbox %}
-        {% crispy_field field %}
-    {% endif %}
-
-    {% if field.label %}
-        </label>
-    {% endif %}
+    {#</div>#}
 
 {% endif %}
